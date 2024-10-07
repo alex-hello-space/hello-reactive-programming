@@ -1,33 +1,25 @@
 package org.tutorial.alex.hello.reactive.webflux;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.tutorial.alex.hello.reactive.webflux.model.ActionResult;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-@SpringBootTest
 public class UserControllerTest {
 
-    @Autowired
-    private UserController userApi;
-
 
     @Test
-    public void testGetById() {
-        Mono<User> userMono = userApi.getById(1);
-        userMono.subscribe(
-                user -> System.out.println(user.toString()),
-                error -> System.err.println("Error: " + error.getMessage())
-        );
-    }
+    public void testGetAll() throws InterruptedException {
+        // 延迟获取，是否堵塞？
+        Flux<ActionResult> userFlux = client.get()
+                .uri("/flux/all").retrieve().bodyToFlux(ActionResult.class);
 
-    @Test
-    public void testGetAll() {
-        Flux<User> userFlux = userApi.getAll();
         userFlux.subscribe(
-                user -> System.out.println(user.toString()),
+                result -> System.out.println(result.getMessage() + " > " + result.getUserRes()),
                 error -> System.err.println("Error: " + error.getMessage())
         );
+        Thread.sleep(100000);
     }
+
+    private WebClient client = WebClient.builder().baseUrl("http://localhost:8080").build();
 }

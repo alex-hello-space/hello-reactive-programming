@@ -1,7 +1,9 @@
-package org.tutorial.alex.hello.reactive.webflux;
+package org.tutorial.alex.hello.reactive.webflux.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.tutorial.alex.hello.reactive.webflux.model.ActionResult;
+import org.tutorial.alex.hello.reactive.webflux.model.User;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,22 +18,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 根据id查询
-    @GetMapping("/{id}")
-    public Mono<User> getById(@PathVariable Integer id) {
-        return userService.getById(id);
-    }
-
     // 查询多个
     @GetMapping("/all")
-    public Flux<User> getAll() {
+    public Flux<ActionResult> getAll() {
         return userService.getAll();
-    }
-
-    // 保存
-    @PostMapping("/save")
-    public Mono<Void> save(@RequestBody Mono<User> userMono) {
-        return userService.save(userMono);
     }
 }
 
