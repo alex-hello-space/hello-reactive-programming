@@ -1,11 +1,13 @@
 package org.tutorial.alex.hello.reactive.webflux.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.tutorial.alex.hello.reactive.webflux.model.ActionResult;
-import org.tutorial.alex.hello.reactive.webflux.model.User;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/flux")
@@ -20,8 +22,16 @@ public class UserController {
 
     // 查询多个
     @GetMapping("/all")
-    public Flux<ActionResult> getAll() {
-        return userService.getAll();
+    public ResponseEntity<Flux<ActionResult>> getAll() {
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .body(userService.getAll());
+    }
+
+    @GetMapping("/all2")
+    public ResponseEntity<Flux<ActionResult>> getAllWithOutMediaType() {
+        return ResponseEntity.ok()
+                .body(userService.getAll());
     }
 }
 

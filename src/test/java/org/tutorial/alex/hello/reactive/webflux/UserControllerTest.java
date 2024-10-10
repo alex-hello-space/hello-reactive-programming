@@ -12,7 +12,7 @@ public class UserControllerTest {
     public void testGetAll() throws InterruptedException {
         // 延迟获取，是否堵塞？
         Flux<ActionResult> userFlux = client.get()
-                .uri("/flux/all").retrieve().bodyToFlux(ActionResult.class);
+                .uri("/flux/all2").retrieve().bodyToFlux(ActionResult.class);
 
         userFlux.subscribe(
                 result -> System.out.println(result.getMessage() + " > " + result.getUserRes()),
