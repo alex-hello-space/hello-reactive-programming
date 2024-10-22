@@ -32,4 +32,12 @@ public class ActionResult {
     public void setUserRes(User userRes) {
         this.userRes = userRes;
     }
+
+    @Override
+    public String toString() {
+        return "ActionResult{" +
+                "message='" + message + '\'' +
+                ", userRes=" + userRes +
+                '}';
+    }
 }

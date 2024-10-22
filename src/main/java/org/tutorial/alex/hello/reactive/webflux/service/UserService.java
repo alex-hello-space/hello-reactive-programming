@@ -1,5 +1,6 @@
 package org.tutorial.alex.hello.reactive.webflux.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.tutorial.alex.hello.reactive.webflux.model.ActionResult;
 import org.tutorial.alex.hello.reactive.webflux.model.User;
@@ -8,6 +9,7 @@ import reactor.core.publisher.Flux;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -30,15 +32,17 @@ public class UserService {
     }
 
     private Flux<ActionResult> msgFlux(String message) {
-        System.out.println("msgFlux: " + message);
+        log.info("msgFlux: " + message);
         return Flux.just(new ActionResult(message));
     }
 
     private Flux<ActionResult> dataFlux() {
+        log.info("dataFlux: start process users");
+
         return Flux.fromIterable(map.values()).flatMap(user -> {
-            System.out.println(">>>>>>>>>>>>>>>dataFlux: sleep");
+            log.info("dataFlux: sleep");
             sleepTreeSecs();
-            System.out.println("dataFlux: " + user);
+            log.info("dataFlux user: " + user.getName());
             return Flux.just(new ActionResult(user));
         });
     }
@@ -49,6 +53,12 @@ public class UserService {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        // start user1 user2 user3 end
+        UserService userService = new UserService();
+        userService.getAll().subscribe(result -> log.info("【client receive】 " + result));
     }
 }
 
